@@ -3,6 +3,8 @@ name: CI Pipeline
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 permissions:
   contents: read
@@ -31,9 +33,9 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
-
   deploy:
     needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
